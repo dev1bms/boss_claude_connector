@@ -1,9 +1,10 @@
-﻿__pycache__/
+﻿PROJECT_KNOWLEDGE.md
+__pycache__/
 *.pyc
 *.pyo
 *.log
-.DS_Store
 .env
 .venv/
 .vscode/
 .idea/
+.DS_Store
