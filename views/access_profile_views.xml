@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_boss_claude_access_profile_tree" model="ir.ui.view">
+        <field name="name">boss.claude.access.profile.tree</field>
+        <field name="model">boss.claude.access.profile</field>
+        <field name="arch" type="xml">
+            <tree string="Access Profiles">
+                <field name="name"/>
+                <field name="active"/>
+                <field name="draft_only_default"/>
+                <field name="log_full_payload"/>
+                <field name="permission_count"/>
+                <field name="token_count"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_boss_claude_access_profile_form" model="ir.ui.view">
+        <field name="name">boss.claude.access.profile.form</field>
+        <field name="model">boss.claude.access.profile</field>
+        <field name="arch" type="xml">
+            <form string="Access Profile">
+                <sheet>
+                    <widget name="web_ribbon" title="Archived" bg_color="bg-danger"
+                            invisible="active"/>
+                    <div class="oe_title">
+                        <label for="name"/>
+                        <h1><field name="name" placeholder="e.g. Cristina Claude Profile"/></h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="active"/>
+                            <field name="draft_only_default"/>
+                            <field name="log_full_payload"/>
+                        </group>
+                        <group>
+                            <field name="permission_count"/>
+                            <field name="token_count"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Model Permissions">
+                            <field name="permission_ids">
+                                <tree editable="bottom">
+                                    <field name="model_id"/>
+                                    <field name="model_model"/>
+                                    <field name="allow_search"/>
+                                    <field name="allow_read"/>
+                                    <field name="allow_create"/>
+                                    <field name="allow_write"/>
+                                    <field name="draft_only"/>
+                                </tree>
+                                <form>
+                                    <group>
+                                        <group>
+                                            <field name="model_id"/>
+                                            <field name="model_model"/>
+                                            <field name="domain_filter" placeholder="[('active','=',True)]"/>
+                                        </group>
+                                        <group>
+                                            <field name="allow_search"/>
+                                            <field name="allow_read"/>
+                                            <field name="allow_create"/>
+                                            <field name="allow_write"/>
+                                            <field name="allow_delete"/>
+                                            <field name="draft_only"/>
+                                        </group>
+                                    </group>
+                                    <field name="allowed_field_ids" widget="many2many_tags"/>
+                                    <field name="notes" placeholder="Notes..."/>
+                                </form>
+                            </field>
+                        </page>
+                        <page string="API Tokens">
+                            <field name="token_ids">
+                                <tree>
+                                    <field name="name"/>
+                                    <field name="active"/>
+                                    <field name="token_preview"/>
+                                    <field name="last_used_at"/>
+                                    <field name="expires_at"/>
+                                </tree>
+                            </field>
+                        </page>
+                        <page string="Notes">
+                            <field name="notes"/>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_boss_claude_access_profile_search" model="ir.ui.view">
+        <field name="name">boss.claude.access.profile.search</field>
+        <field name="model">boss.claude.access.profile</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+                <filter name="active" string="Active" domain="[('active','=',True)]"/>
+                <filter name="archived" string="Archived" domain="[('active','=',False)]"/>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_boss_claude_access_profile" model="ir.actions.act_window">
+        <field name="name">Access Profiles</field>
+        <field name="res_model">boss.claude.access.profile</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <!-- Stand-alone Model Permissions view -->
+    <record id="view_boss_claude_model_permission_tree" model="ir.ui.view">
+        <field name="name">boss.claude.model.permission.tree</field>
+        <field name="model">boss.claude.model.permission</field>
+        <field name="arch" type="xml">
+            <tree string="Model Permissions">
+                <field name="profile_id"/>
+                <field name="model_id"/>
+                <field name="model_model"/>
+                <field name="allow_search"/>
+                <field name="allow_read"/>
+                <field name="allow_create"/>
+                <field name="allow_write"/>
+                <field name="draft_only"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_boss_claude_model_permission_form" model="ir.ui.view">
+        <field name="name">boss.claude.model.permission.form</field>
+        <field name="model">boss.claude.model.permission</field>
+        <field name="arch" type="xml">
+            <form string="Model Permission">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="profile_id"/>
+                            <field name="model_id"/>
+                            <field name="model_model"/>
+                            <field name="domain_filter"/>
+                        </group>
+                        <group>
+                            <field name="allow_search"/>
+                            <field name="allow_read"/>
+                            <field name="allow_create"/>
+                            <field name="allow_write"/>
+                            <field name="allow_delete"/>
+                            <field name="draft_only"/>
+                        </group>
+                    </group>
+                    <field name="allowed_field_ids" widget="many2many_tags"/>
+                    <field name="notes"/>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_boss_claude_model_permission" model="ir.actions.act_window">
+        <field name="name">Model Permissions</field>
+        <field name="res_model">boss.claude.model.permission</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+</odoo>

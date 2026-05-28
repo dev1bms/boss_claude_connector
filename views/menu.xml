@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <menuitem id="menu_boss_claude_root"
+              name="Boss Claude Connector"
+              sequence="90"
+              groups="group_boss_claude_user"/>
+
+    <menuitem id="menu_boss_claude_review_queue"
+              name="AI Review Queue"
+              parent="menu_boss_claude_root"
+              action="action_boss_claude_review_queue"
+              sequence="10"/>
+
+    <menuitem id="menu_boss_claude_config"
+              name="Configuration"
+              parent="menu_boss_claude_root"
+              sequence="50"
+              groups="group_boss_claude_admin"/>
+
+    <menuitem id="menu_boss_claude_access_profile"
+              name="Access Profiles"
+              parent="menu_boss_claude_config"
+              action="action_boss_claude_access_profile"
+              sequence="10"
+              groups="group_boss_claude_admin"/>
+
+    <menuitem id="menu_boss_claude_api_token"
+              name="API Tokens"
+              parent="menu_boss_claude_config"
+              action="action_boss_claude_api_token"
+              sequence="20"
+              groups="group_boss_claude_admin"/>
+
+    <menuitem id="menu_boss_claude_model_permission"
+              name="Model Permissions"
+              parent="menu_boss_claude_config"
+              action="action_boss_claude_model_permission"
+              sequence="30"
+              groups="group_boss_claude_admin"/>
+
+    <menuitem id="menu_boss_claude_normalization_rule"
+              name="Normalization Rules"
+              parent="menu_boss_claude_config"
+              action="action_boss_claude_normalization_rule"
+              sequence="40"
+              groups="group_boss_claude_admin"/>
+
+    <menuitem id="menu_boss_claude_request_log"
+              name="Request Logs"
+              parent="menu_boss_claude_root"
+              action="action_boss_claude_request_log"
+              sequence="60"/>
+
+</odoo>

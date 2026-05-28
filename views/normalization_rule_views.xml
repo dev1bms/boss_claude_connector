@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_boss_claude_normalization_rule_tree" model="ir.ui.view">
+        <field name="name">boss.claude.normalization.rule.tree</field>
+        <field name="model">boss.claude.normalization.rule</field>
+        <field name="arch" type="xml">
+            <tree string="Normalization Rules" editable="bottom">
+                <field name="module"/>
+                <field name="model"/>
+                <field name="field"/>
+                <field name="raw_value"/>
+                <field name="normalized_value"/>
+                <field name="match_type"/>
+                <field name="confidence"/>
+                <field name="active"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_boss_claude_normalization_rule_form" model="ir.ui.view">
+        <field name="name">boss.claude.normalization.rule.form</field>
+        <field name="model">boss.claude.normalization.rule</field>
+        <field name="arch" type="xml">
+            <form string="Normalization Rule">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="module"/>
+                            <field name="model"/>
+                            <field name="field"/>
+                        </group>
+                        <group>
+                            <field name="raw_value"/>
+                            <field name="normalized_value"/>
+                            <field name="match_type"/>
+                            <field name="confidence"/>
+                            <field name="active"/>
+                        </group>
+                    </group>
+                    <field name="notes" placeholder="Notes..."/>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_boss_claude_normalization_rule_search" model="ir.ui.view">
+        <field name="name">boss.claude.normalization.rule.search</field>
+        <field name="model">boss.claude.normalization.rule</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="raw_value"/>
+                <field name="normalized_value"/>
+                <field name="module"/>
+                <field name="model"/>
+                <field name="field"/>
+                <filter name="active" string="Active" domain="[('active','=',True)]"/>
+                <group string="Group By">
+                    <filter name="g_module" string="Module" context="{'group_by':'module'}"/>
+                    <filter name="g_model" string="Model" context="{'group_by':'model'}"/>
+                    <filter name="g_field" string="Field" context="{'group_by':'field'}"/>
+                    <filter name="g_normalized" string="Normalized Value" context="{'group_by':'normalized_value'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_boss_claude_normalization_rule" model="ir.actions.act_window">
+        <field name="name">Normalization Rules</field>
+        <field name="res_model">boss.claude.normalization.rule</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+</odoo>

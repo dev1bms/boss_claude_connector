@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_boss_claude_request_log_tree" model="ir.ui.view">
+        <field name="name">boss.claude.request.log.tree</field>
+        <field name="model">boss.claude.request.log</field>
+        <field name="arch" type="xml">
+            <tree string="Request Logs" create="false" edit="false" delete="false"
+                  decoration-danger="status=='error'" decoration-warning="status=='blocked'">
+                <field name="create_date"/>
+                <field name="name"/>
+                <field name="token_id"/>
+                <field name="profile_id"/>
+                <field name="tool_name"/>
+                <field name="model_name"/>
+                <field name="operation"/>
+                <field name="status"/>
+                <field name="duration_ms"/>
+                <field name="user_id"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_boss_claude_request_log_form" model="ir.ui.view">
+        <field name="name">boss.claude.request.log.form</field>
+        <field name="model">boss.claude.request.log</field>
+        <field name="arch" type="xml">
+            <form string="Request Log" create="false" edit="false">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="create_date"/>
+                            <field name="token_id"/>
+                            <field name="profile_id"/>
+                            <field name="user_id"/>
+                        </group>
+                        <group>
+                            <field name="tool_name"/>
+                            <field name="model_name"/>
+                            <field name="operation"/>
+                            <field name="status"/>
+                            <field name="duration_ms"/>
+                            <field name="created_record_model"/>
+                            <field name="created_record_id"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Request Payload">
+                            <field name="request_payload" widget="text"/>
+                        </page>
+                        <page string="Response Payload">
+                            <field name="response_payload" widget="text"/>
+                        </page>
+                        <page string="Error">
+                            <field name="error_message"/>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_boss_claude_request_log_search" model="ir.ui.view">
+        <field name="name">boss.claude.request.log.search</field>
+        <field name="model">boss.claude.request.log</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+                <field name="tool_name"/>
+                <field name="model_name"/>
+                <field name="profile_id"/>
+                <field name="token_id"/>
+                <filter name="success" string="Success" domain="[('status','=','success')]"/>
+                <filter name="error" string="Error" domain="[('status','=','error')]"/>
+                <filter name="blocked" string="Blocked" domain="[('status','=','blocked')]"/>
+                <group string="Group By">
+                    <filter name="g_tool" string="Tool" context="{'group_by':'tool_name'}"/>
+                    <filter name="g_profile" string="Profile" context="{'group_by':'profile_id'}"/>
+                    <filter name="g_status" string="Status" context="{'group_by':'status'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_boss_claude_request_log" model="ir.actions.act_window">
+        <field name="name">Request Logs</field>
+        <field name="res_model">boss.claude.request.log</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+</odoo>

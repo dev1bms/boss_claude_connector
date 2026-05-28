@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Optional generic seed using boss.claude.normalization.rule.
+         Scope is module='boss_charge_codes' so it does not collide with
+         rules for real Odoo models. Users can disable or delete freely. -->
+    <data noupdate="1">
+
+        <record id="nr_fai" model="boss.claude.normalization.rule">
+            <field name="name">FAI - Freight Air Import</field>
+            <field name="module">boss_charge_codes</field>
+            <field name="field">boss_code</field>
+            <field name="raw_value">flete aereo import</field>
+            <field name="normalized_value">FAI</field>
+            <field name="match_type">contains</field>
+            <field name="confidence">0.95</field>
+        </record>
+
+        <record id="nr_fae" model="boss.claude.normalization.rule">
+            <field name="name">FAE - Freight Air Export</field>
+            <field name="module">boss_charge_codes</field>
+            <field name="field">boss_code</field>
+            <field name="raw_value">flete aereo export</field>
+            <field name="normalized_value">FAE</field>
+            <field name="match_type">contains</field>
+            <field name="confidence">0.95</field>
+        </record>
+
+        <record id="nr_thc" model="boss.claude.normalization.rule">
+            <field name="name">THC - Terminal Handling Charge</field>
+            <field name="module">boss_charge_codes</field>
+            <field name="field">boss_code</field>
+            <field name="raw_value">terminal handling charge</field>
+            <field name="normalized_value">THC</field>
+            <field name="match_type">contains</field>
+            <field name="confidence">0.95</field>
+        </record>
+
+        <record id="nr_alm" model="boss.claude.normalization.rule">
+            <field name="name">ALM - Almacenaje / Storage</field>
+            <field name="module">boss_charge_codes</field>
+            <field name="field">boss_code</field>
+            <field name="raw_value">almacenaje storage</field>
+            <field name="normalized_value">ALM</field>
+            <field name="match_type">token</field>
+            <field name="confidence">0.9</field>
+        </record>
+
+        <record id="nr_awb" model="boss.claude.normalization.rule">
+            <field name="name">AWB - Documentation / Data</field>
+            <field name="module">boss_charge_codes</field>
+            <field name="field">boss_code</field>
+            <field name="raw_value">documentation data awb</field>
+            <field name="normalized_value">AWB</field>
+            <field name="match_type">token</field>
+            <field name="confidence">0.85</field>
+        </record>
+
+        <record id="nr_fad" model="boss.claude.normalization.rule">
+            <field name="name">FAD - Despacho Aduanas Import</field>
+            <field name="module">boss_charge_codes</field>
+            <field name="field">boss_code</field>
+            <field name="raw_value">despacho aduanas import customs clearance</field>
+            <field name="normalized_value">FAD</field>
+            <field name="match_type">token</field>
+            <field name="confidence">0.9</field>
+        </record>
+
+        <record id="nr_qbr" model="boss.claude.normalization.rule">
+            <field name="name">QBR - Quebranto Bancario</field>
+            <field name="module">boss_charge_codes</field>
+            <field name="field">boss_code</field>
+            <field name="raw_value">quebranto bancario</field>
+            <field name="normalized_value">QBR</field>
+            <field name="match_type">contains</field>
+            <field name="confidence">0.95</field>
+        </record>
+
+        <record id="nr_seg" model="boss.claude.normalization.rule">
+            <field name="name">SEG - Seguro / Insurance</field>
+            <field name="module">boss_charge_codes</field>
+            <field name="field">boss_code</field>
+            <field name="raw_value">seguro insurance</field>
+            <field name="normalized_value">SEG</field>
+            <field name="match_type">token</field>
+            <field name="confidence">0.9</field>
+        </record>
+
+        <record id="nr_inl" model="boss.claude.normalization.rule">
+            <field name="name">INL - Inland / Delivery</field>
+            <field name="module">boss_charge_codes</field>
+            <field name="field">boss_code</field>
+            <field name="raw_value">inland delivery transporte terrestre</field>
+            <field name="normalized_value">INL</field>
+            <field name="match_type">token</field>
+            <field name="confidence">0.85</field>
+        </record>
+
+        <record id="nr_cau" model="boss.claude.normalization.rule">
+            <field name="name">CAU - Caucion Aval</field>
+            <field name="module">boss_charge_codes</field>
+            <field name="field">boss_code</field>
+            <field name="raw_value">caucion aval</field>
+            <field name="normalized_value">CAU</field>
+            <field name="match_type">contains</field>
+            <field name="confidence">0.95</field>
+        </record>
+
+        <record id="nr_dua" model="boss.claude.normalization.rule">
+            <field name="name">DUA - Customs Taxes</field>
+            <field name="module">boss_charge_codes</field>
+            <field name="field">boss_code</field>
+            <field name="raw_value">dua customs taxes</field>
+            <field name="normalized_value">DUA</field>
+            <field name="match_type">token</field>
+            <field name="confidence">0.9</field>
+        </record>
+
+    </data>
+</odoo>

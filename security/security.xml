@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="0">
+
+        <record id="module_category_boss_claude" model="ir.module.category">
+            <field name="name">Boss Claude Connector</field>
+            <field name="description">Permissions for the Boss Claude Connector module.</field>
+            <field name="sequence">20</field>
+        </record>
+
+        <record id="group_boss_claude_user" model="res.groups">
+            <field name="name">Boss Claude User</field>
+            <field name="category_id" ref="module_category_boss_claude"/>
+            <field name="comment">Can view request logs and prevision drafts.</field>
+        </record>
+
+        <record id="group_boss_claude_admin" model="res.groups">
+            <field name="name">Boss Claude Admin</field>
+            <field name="category_id" ref="module_category_boss_claude"/>
+            <field name="implied_ids" eval="[(4, ref('group_boss_claude_user'))]"/>
+            <field name="users" eval="[(4, ref('base.user_admin'))]"/>
+            <field name="comment">Can manage access profiles, model permissions, API tokens and charge code mappings.</field>
+        </record>
+
+        <!-- Sequence for request log naming -->
+        <record id="seq_boss_claude_request_log" model="ir.sequence">
+            <field name="name">Boss Claude Request Log</field>
+            <field name="code">boss.claude.request.log</field>
+            <field name="prefix">BCC/</field>
+            <field name="padding">6</field>
+            <field name="implementation">no_gap</field>
+        </record>
+
+    </data>
+</odoo>

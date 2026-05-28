@@ -1,0 +1,10 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_boss_claude_access_profile_admin,boss.claude.access.profile admin,model_boss_claude_access_profile,group_boss_claude_admin,1,1,1,1
+access_boss_claude_model_permission_admin,boss.claude.model.permission admin,model_boss_claude_model_permission,group_boss_claude_admin,1,1,1,1
+access_boss_claude_api_token_admin,boss.claude.api.token admin,model_boss_claude_api_token,group_boss_claude_admin,1,1,1,1
+access_boss_claude_request_log_admin,boss.claude.request.log admin,model_boss_claude_request_log,group_boss_claude_admin,1,1,1,1
+access_boss_claude_request_log_user,boss.claude.request.log user,model_boss_claude_request_log,group_boss_claude_user,1,0,0,0
+access_boss_claude_normalization_rule_admin,boss.claude.normalization.rule admin,model_boss_claude_normalization_rule,group_boss_claude_admin,1,1,1,1
+access_boss_claude_normalization_rule_user,boss.claude.normalization.rule user,model_boss_claude_normalization_rule,group_boss_claude_user,1,0,0,0
+access_boss_claude_review_queue_admin,boss.claude.review.queue admin,model_boss_claude_review_queue,group_boss_claude_admin,1,1,1,1
+access_boss_claude_review_queue_user,boss.claude.review.queue user,model_boss_claude_review_queue,group_boss_claude_user,1,1,1,0
