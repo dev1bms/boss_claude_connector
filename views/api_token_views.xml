@@ -61,4 +61,27 @@
         <field name="view_mode">tree,form</field>
     </record>
 
+    <!-- Token display wizard -->
+    <record id="view_boss_claude_token_wizard_form" model="ir.ui.view">
+        <field name="name">boss.claude.token.wizard.form</field>
+        <field name="model">boss.claude.token.wizard</field>
+        <field name="arch" type="xml">
+            <form string="API Token Generated">
+                <sheet>
+                    <div class="alert alert-info" role="alert">
+                        <field name="warning" readonly="1" nolabel="1" class="fw-bold"/>
+                    </div>
+                    <group>
+                        <field name="raw_token" readonly="1" nolabel="1"
+                               widget="CopyClipboardChar"
+                               style="font-family:monospace;"/>
+                    </group>
+                    <footer>
+                        <button string="Close" type="object" name="action_close" class="btn-primary"/>
+                    </footer>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
 </odoo>

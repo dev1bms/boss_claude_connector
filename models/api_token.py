@@ -2,7 +2,7 @@
 import hashlib
 import secrets
 
-from odoo import api, fields, models, _
+from odoo import api, fields, models
 from odoo.exceptions import UserError
 
 
@@ -42,28 +42,21 @@ class BossClaudeApiToken(models.Model):
         return hashlib.sha256(raw_token.encode("utf-8")).hexdigest()
 
     def action_generate_token(self):
-        """Generate a new raw token, store only its hash, return it once via a wizard-like action."""
+        """Generate a new raw token, store only its hash, then show it once in a transient wizard."""
         self.ensure_one()
         raw = "%s_%s" % (TOKEN_PREFIX, secrets.token_urlsafe(32))
         self.sudo().write({
             "token_hash": self._hash_token(raw),
             "token_preview": raw[-4:],
         })
-        # Post the raw token ONLY in chatter for one-time copy. It is not stored as a field.
-        body = _(
-            "<b>New API token generated.</b><br/>"
-            "Copy it now. It will not be shown again.<br/>"
-            "<pre style='user-select:all;'>%s</pre>"
-        ) % raw
-        self.message_post(body=body, subject=_("Boss Claude Token Generated"))
         return {
-            "type": "ir.actions.client",
-            "tag": "display_notification",
-            "params": {
-                "title": _("Token generated"),
-                "message": _("The raw token has been posted in the chatter. Copy it now; it will not be stored."),
-                "sticky": True,
-                "type": "success",
+            "type": "ir.actions.act_window",
+            "res_model": "boss.claude.token.wizard",
+            "view_mode": "form",
+            "target": "new",
+            "context": {
+                "default_token_id": self.id,
+                "default_raw_token": raw,
             },
         }
 

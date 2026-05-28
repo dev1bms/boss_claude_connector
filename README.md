@@ -58,8 +58,10 @@ docker exec -it <ODOO_CONTAINER> odoo -c /etc/odoo/odoo.conf -d <DB_NAME> -u bos
    * `boss.claude.review.queue` → allow_read, allow_create
    * `boss.claude.normalization.rule` → allow_search, allow_read
    For each, set **Allowed Fields** to whitelist the columns Claude is allowed to see. If empty, the module falls back to a tiny safe set (`id`, `name`, `display_name`, `create_date`, `write_date`).
-5. Open **Configuration → API Tokens**, create one linked to the profile, click **Generate Token**. The raw token is shown **once** in the chatter. Copy it now.
+5. Open **Configuration → API Tokens**, create one linked to the profile, click **Generate Token**. A popup shows the full raw token **exactly once**. Copy it immediately and store it securely.
 6. Send `Authorization: Bearer <token>` from your Claude/MCP client.
+
+> **Important**: the `token_preview` field (last 4 characters) shown in the Odoo list view is **not** the full token. Using only the preview in your `Authorization` header will result in a `401 invalid_token` error. If you lose the full raw token, generate a new one — the old one cannot be recovered.
 
 ## API Endpoints
 

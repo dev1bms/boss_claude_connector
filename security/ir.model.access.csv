@@ -8,3 +8,4 @@ access_boss_claude_normalization_rule_admin,boss.claude.normalization.rule admin
 access_boss_claude_normalization_rule_user,boss.claude.normalization.rule user,model_boss_claude_normalization_rule,group_boss_claude_user,1,0,0,0
 access_boss_claude_review_queue_admin,boss.claude.review.queue admin,model_boss_claude_review_queue,group_boss_claude_admin,1,1,1,1
 access_boss_claude_review_queue_user,boss.claude.review.queue user,model_boss_claude_review_queue,group_boss_claude_user,1,1,1,0
+access_boss_claude_token_wizard_admin,boss.claude.token.wizard admin,model_boss_claude_token_wizard,group_boss_claude_admin,1,1,1,1

@@ -132,7 +132,7 @@ class BossClaudeConnector(http.Controller):
             "server_time": fields.Datetime.now().isoformat(),
         })
 
-    @http.route("/boss_claude/tools/list", type="http", auth="public", methods=["POST"], csrf=False)
+    @http.route("/boss_claude/tools/list", type="http", auth="public", methods=["GET", "POST"], csrf=False)
     def tools_list(self, **kwargs):
         token_raw = _extract_bearer()
         if not token_raw:
