@@ -32,7 +32,7 @@
                     <widget name="web_ribbon" title="Revoked" bg_color="bg-danger" invisible="active"/>
                     <div class="oe_title">
                         <label for="name"/>
-                        <h1><field name="name" placeholder="e.g. Cristina Desktop Claude"/></h1>
+                        <h1><field name="name" placeholder="e.g. Desktop Claude Client"/></h1>
                     </div>
                     <group>
                         <group>

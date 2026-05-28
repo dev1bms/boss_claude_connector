@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 {
     "name": "Boss Claude Connector",
-    "version": "17.0.1.0.0",
-    "summary": "Secure connector between Claude/MCP clients and Odoo Boss.",
+    "version": "17.0.2.0.0",
+    "summary": "Secure connector between Claude/MCP clients and Odoo.",
     "description": """
 Boss Claude Connector
 =====================
@@ -10,13 +10,13 @@ Boss Claude Connector
 Exposes secure JSON tool endpoints so that Claude/MCP clients can:
 
 * Read selected Odoo data.
-* Normalize external charge names into Boss charge codes.
-* Create draft-only quotations and prevision records.
+* Normalize external values into canonical codes.
+* Queue draft business changes for human approval.
 
 All actions are logged. Tokens are hashed. Draft-only write policy enforced.
 """,
-    "author": "Boss Continental",
-    "website": "https://www.boss-continental.com",
+    "author": "Community",
+    "website": "",
     "category": "Tools/Integration",
     "license": "LGPL-3",
     "depends": [

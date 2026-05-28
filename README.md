@@ -1,21 +1,20 @@
 # Boss Claude Connector
 
-Secure Odoo 17 connector between Claude / MCP clients and Odoo Boss.
+Secure Odoo 17 connector between Claude / MCP clients and Odoo.
 
 ## Purpose
 
-Cristina's real workflow is:
+A generic AI gateway that lets Claude (Desktop / Code / MCP client) safely interact with Odoo:
 
-1. Cristina receives customer requests by email + attachments.
-2. **Claude** (Desktop / Code / MCP client) reads those emails externally.
-3. Claude extracts customer / route / cost data, optionally produces an Excel review.
-4. Claude calls **this module** over HTTP to:
+1. Claude reads customer requests externally (email, documents, chat, etc.).
+2. Claude extracts structured data and reasoning.
+3. Claude calls **this module** over HTTP to:
    * search/read selected Odoo data (customers, opportunities, etc.),
-   * normalize external charge names into Boss codes,
-   * create **draft-only** quotations and prevision lines.
-5. Odoo remains the system of record. **Cristina manually confirms** everything.
+   * normalize external values into canonical codes,
+   * queue **draft-only** business changes for human approval.
+4. Odoo remains the system of record. **A human reviewer manually approves and applies** every queued suggestion.
 
-> This module does **not** read email. Email/attachment reading happens in Claude (externally). The module only exposes safe, controlled API tools into Odoo.
+> This module does **not** read email or external documents. Reading happens in Claude (externally). The module only exposes safe, controlled API tools into Odoo.
 
 ## Architecture
 
@@ -35,29 +34,29 @@ Claude Desktop / Claude Code / MCP client
 ## Installation
 
 1. Place this folder in your custom addons path:
-   `C:\odoo17-docker\custom-addons\boss_claude_connector`
+   `/path/to/custom-addons/boss_claude_connector`
 2. Restart Odoo and update the apps list.
 3. Install the **Boss Claude Connector** app.
 
 Or with Docker:
 
 ```powershell
-docker exec -it odoo17_web odoo -c /etc/odoo/odoo.conf -d <DB_NAME> -u boss_claude_connector --stop-after-init
+docker exec -it <ODOO_CONTAINER> odoo -c /etc/odoo/odoo.conf -d <DB_NAME> -u boss_claude_connector --stop-after-init
 ```
 
-> Replace `<DB_NAME>` with your real database name (e.g. `boss17_dev`).
+> Replace `<DB_NAME>` with your real database name and `<ODOO_CONTAINER>` with your container name.
 
 ## Configuration
 
 1. Log in as admin (you are automatically in **Boss Claude Admin**).
 2. Open **Boss Claude Connector → Configuration → Access Profiles**.
-3. Create a profile (e.g. `Cristina Claude Profile`).
+3. Create a profile (e.g. `Customer Service AI Access`).
 4. Add **Model Permissions**:
    * `res.partner` → allow_search, allow_read
    * `crm.lead` → allow_search, allow_read
    * `sale.order` → allow_read, allow_create
-   * `boss.claude.prevision.draft` → allow_read, allow_create
-   * `boss.claude.charge.code.map` → allow_search, allow_read
+   * `boss.claude.review.queue` → allow_read, allow_create
+   * `boss.claude.normalization.rule` → allow_search, allow_read
    For each, set **Allowed Fields** to whitelist the columns Claude is allowed to see. If empty, the module falls back to a tiny safe set (`id`, `name`, `display_name`, `create_date`, `write_date`).
 5. Open **Configuration → API Tokens**, create one linked to the profile, click **Generate Token**. The raw token is shown **once** in the chatter. Copy it now.
 6. Send `Authorization: Bearer <token>` from your Claude/MCP client.
@@ -95,80 +94,92 @@ curl -X POST http://localhost:8069/boss_claude/tools/call \
     "tool": "search_records",
     "params": {
       "model": "res.partner",
-      "domain": [["name","ilike","Cofitel"]],
+      "domain": [["name","ilike","Example Company"]],
       "fields": ["id","name","email"],
       "limit": 10
     }
   }'
 ```
 
-### Get Boss Charge Codes
+### Get Normalization Rules
 
 ```bash
 curl -X POST http://localhost:8069/boss_claude/tools/call \
   -H "Authorization: Bearer YOUR_TOKEN" \
   -H "Content-Type: application/json" \
-  -d '{"tool":"get_boss_charge_codes","params":{}}'
+  -d '{"tool":"get_normalization_rules","params":{"module":"boss_charge_codes"}}'
 ```
 
-### Normalize Charge Name
+### Normalize a Value
 
 ```bash
 curl -X POST http://localhost:8069/boss_claude/tools/call \
   -H "Authorization: Bearer YOUR_TOKEN" \
   -H "Content-Type: application/json" \
-  -d '{"tool":"normalize_charge_name","params":{"raw_name":"Documentation","transport_mode":"air"}}'
+  -d '{"tool":"normalize_value","params":{"raw_value":"Documentation","module":"boss_charge_codes","field":"boss_code"}}'
 ```
 
-### Validate Sale vs Prevision Codes
+### Validate Codes (generic consistency check)
 
 ```bash
 curl -X POST http://localhost:8069/boss_claude/tools/call \
   -H "Authorization: Bearer YOUR_TOKEN" \
   -H "Content-Type: application/json" \
   -d '{
-    "tool": "validate_sale_prevision_codes",
+    "tool": "validate_codes",
     "params": {
-      "prevision_lines":[{"concept":"Air Freight Import","boss_code":"FAI"}],
-      "sale_lines":[{"concept":"Air Freight Import","boss_code":"FMI"}]
+      "lines_a":[{"concept":"Air Freight Import","code":"FAI"}],
+      "lines_b":[{"concept":"Air Freight Import","code":"FMI"}],
+      "label_a":"cost","label_b":"sale"
     }
   }'
 ```
 
-### Create Draft Quotation
+### Queue a Suggestion (create)
 
 ```bash
 curl -X POST http://localhost:8069/boss_claude/tools/call \
   -H "Authorization: Bearer YOUR_TOKEN" \
   -H "Content-Type: application/json" \
   -d '{
-    "tool": "create_draft_quotation",
+    "tool": "create_suggestion",
     "params": {
-      "partner_id": 1,
-      "origin_note": "From Cristina email 2025-05-28",
-      "lines": [
-        {"boss_code":"FAI","name":"Air Freight Import","price_unit":350.0,"quantity":1},
-        {"boss_code":"AWB","name":"Documentation","price_unit":45.0,"quantity":1}
-      ]
+      "name": "Draft quotation for Example Company",
+      "target_module": "sale",
+      "target_model": "sale.order",
+      "target_operation": "create",
+      "values": {"partner_id": 1},
+      "source_text": "Customer email requesting air freight quote",
+      "confidence": 0.7
     }
   }'
 ```
 
-### Create Draft Prevision
+### Queue a Suggestion (post note)
 
 ```bash
 curl -X POST http://localhost:8069/boss_claude/tools/call \
   -H "Authorization: Bearer YOUR_TOKEN" \
   -H "Content-Type: application/json" \
   -d '{
-    "tool": "create_draft_prevision",
+    "tool": "create_suggestion",
     "params": {
-      "supplier_id": 7,
-      "lines": [
-        {"boss_code":"ALM","concept":"Almacenaje","amount":30.0,"tax_status":"needs_review","source":"handling tariff","confidence":0.8}
-      ]
+      "target_module": "crm",
+      "target_model": "crm.lead",
+      "target_operation": "post_note",
+      "target_record_id": 1,
+      "message": "AI summary: customer asks for air freight import route."
     }
   }'
+```
+
+### List Pending Suggestions
+
+```bash
+curl -X POST http://localhost:8069/boss_claude/tools/call \
+  -H "Authorization: Bearer YOUR_TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{"tool":"list_pending_suggestions","params":{"status":"pending"}}'
 ```
 
 ## Example Claude / MCP config
@@ -197,17 +208,17 @@ curl -X POST http://localhost:8069/boss_claude/tools/call \
 
 ## Limitations / Known Issues (v1)
 
-* No real Boss `prevision` model integration — falls back to `boss.claude.prevision.draft`.
-* No automatic product mapping. All quotation lines use a single fallback service product `AI Draft Service Line`. Real product mapping is out of scope for v1.
+* The connector is generic; it does not ship with business-specific Odoo models. Prevision/venta models must be added by the implementing team.
+* No automatic product mapping. Quotation suggestions that reach the apply stage use a single fallback service product `AI Draft Service Line` unless a real product mapping is configured.
 * No rate limiting; deploy behind a reverse proxy if needed.
 * No webhook to push events back to Claude; pull-based only.
-* Charge name normalization uses simple normalized-text + token overlap, not a real fuzzy/embedding match.
-* VAT rule logic is **not enforced** — `tax_status` is only a flag for human review.
+* Normalization uses simple normalized-text + token overlap, not a real fuzzy/embedding match.
+* VAT/tax rule logic is **not enforced** — `tax_status` is only a flag for human review.
 
 ## Next Recommended Steps
 
-1. Map Boss real prevision / venta models once schema is known and add dedicated tools.
-2. Add per-customer / per-supplier charge code overrides.
+1. Map real business models (prevision, venta, shipment, etc.) once schema is known and add dedicated tools.
+2. Add per-customer / per-supplier normalization overrides.
 3. Add a Settings wizard generating a ready-to-paste MCP config block.
 4. Add a small product-mapping model so quotation lines can use real Odoo products.
 5. Add automated tests under `tests/`.

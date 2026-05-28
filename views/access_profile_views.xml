@@ -26,7 +26,7 @@
                             invisible="active"/>
                     <div class="oe_title">
                         <label for="name"/>
-                        <h1><field name="name" placeholder="e.g. Cristina Claude Profile"/></h1>
+                        <h1><field name="name" placeholder="e.g. Customer Service AI Profile"/></h1>
                     </div>
                     <group>
                         <group>
